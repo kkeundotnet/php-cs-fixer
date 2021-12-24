@@ -49,6 +49,7 @@ and `php-cs-rules-fixer-part-options` are not used."
            (const :value "@PSR0")
            (const :value "@PSR1")
            (const :value "@PSR2")
+           (const :value "@PSR12")
            (const :value "@Symfony")
            (const :value "@Symfony::risky")
            (const :value "@PHP70Migration:risky")
@@ -56,7 +57,7 @@ and `php-cs-rules-fixer-part-options` are not used."
   :group 'php-cs-fixer)
 
 (defcustom php-cs-fixer-rules-fixer-part-options
-  '("no_multiline_whitespace_before_semicolons" "concat_space")
+  '("multiline_whitespace_before_semicolons" "concat_space")
   "The 'php-cs-fixer' --rules part options.
 These options are not part of `php-cs-fixer-rules-level-part-options`."
   :type '(repeat string)
@@ -132,7 +133,7 @@ ARG is defined as for that function."
             (if php-cs-fixer-rules-level-part-options
                 (concat (mapconcat 'identity php-cs-fixer-rules-level-part-options ",") ",")
               nil)
-            "-psr0" ;; Because tmpfile can not support this constraint
+            "-psr_autoloading" ;; Because tmpfile can not support this constraint
             ))
           (other-opts (if php-cs-fixer-rules-fixer-part-options (concat "," (mapconcat 'identity php-cs-fixer-rules-fixer-part-options ",")) nil)))
 
@@ -145,7 +146,7 @@ ARG is defined as for that function."
 Fix this issue removing the Emacs package php-cs-fixer or installing the program php-cs-fixer")
 
 (defvar php-cs-fixer-command-bad-version-msg "Command php-cs-fixer version not supported.
-Fix this issue removing the Emacs package php-cs-fixer or updating the program php-cs-fixer to version 2.*")
+Fix this issue removing the Emacs package php-cs-fixer or updating the program php-cs-fixer to version 3.*")
 
 (defvar php-cs-fixer-is-command-ok-var nil)
 
@@ -162,7 +163,7 @@ for the next calls."
       (setq php-cs-fixer-is-command-ok-var 0)
 
       (if (executable-find php-cs-fixer-command)
-          (if (string-match ".+ [2-3].[0-9]+.*"
+          (if (string-match ".+ 3.[0-9]+.*"
                             (shell-command-to-string
                              (concat php-cs-fixer-command " --version")))
               (progn (setq php-cs-fixer-is-command-ok-var 1) t)
